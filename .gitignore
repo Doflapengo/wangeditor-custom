@@ -122,3 +122,5 @@ cypress/videos
 cypress/screenshots
 cypress/results
 cypress/logs
+
+yarn.lock
