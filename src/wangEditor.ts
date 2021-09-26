@@ -10,6 +10,7 @@ import './assets/style/text.less'
 import './assets/style/panel.less'
 import './assets/style/droplist.less'
 import './assets/style/img-depot.less'
+import './assets/style/table.less'
 
 import './utils/polyfill'
 import Editor from './editor/index'
