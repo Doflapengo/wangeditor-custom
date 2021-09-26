@@ -9,6 +9,7 @@ import './assets/style/menus.less'
 import './assets/style/text.less'
 import './assets/style/panel.less'
 import './assets/style/droplist.less'
+import './assets/style/img-depot.less'
 
 import './utils/polyfill'
 import Editor from './editor/index'
