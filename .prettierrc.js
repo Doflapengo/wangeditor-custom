@@ -8,7 +8,7 @@ module.exports = {
     // true: Put > on the last line instead of at a new line
     jsxBracketSameLine: false,
     // 行宽
-    printWidth: 100,
+    printWidth: 800000,
     // 换行方式
     proseWrap: 'preserve',
     // 分号

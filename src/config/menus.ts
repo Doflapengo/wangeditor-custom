@@ -45,49 +45,40 @@ export type tooltipPositionType = 'up' | 'down'
 /*表情菜单数据结构类型END*/
 export default {
     menus: [
-        'head',
-        'bold',
-        'fontSize',
+        // 'head',
+        // 'bold',
+        // 'fontSize',
         // 'customFontSize',
-        'fontName',
-        'italic',
-        'underline',
-        'strikeThrough',
-        'indent',
-        'lineHeight',
-        'foreColor',
-        'backColor',
-        'link',
-        'list',
-        'todo',
-        'justify',
-        'quote',
-        'emoticon',
+        // 'fontName',
+        // 'italic',
+        // 'underline',
+        // 'strikeThrough',
+        // 'indent',
+        // 'lineHeight',
+        // 'foreColor',
+        // 'backColor',
+        // 'link',
+        // 'list',
+        // 'todo',
+        // 'justify',
+        // 'quote',
+        // 'emoticon',
         // 'image',
-        'video',
+        // 'video',
+        // 'code',
+        // 'splitLine',
+        // 'undo',
+        // 'redo',
+        'head-1', // 一级标题
+        'head-2', // 二级标题
+        'head-3', // 三级级标题
+        'head-4', // 三级级标题
+        'head-5', // 三级级标题
+        'imgDepot', // 图库
         'table',
-        'code',
-        'splitLine',
-        'undo',
-        'redo',
-        'imgDepot',
     ],
 
-    fontNames: [
-        '黑体',
-        '仿宋',
-        '楷体',
-        '标楷体',
-        '华文仿宋',
-        '华文楷体',
-        '宋体',
-        '微软雅黑',
-        'Arial',
-        'Tahoma',
-        'Verdana',
-        'Times New Roman',
-        'Courier New',
-    ],
+    fontNames: ['黑体', '仿宋', '楷体', '标楷体', '华文仿宋', '华文楷体', '宋体', '微软雅黑', 'Arial', 'Tahoma', 'Verdana', 'Times New Roman', 'Courier New'],
     //  fontNames: [{ name: '宋体', value: '宋体' }],
 
     fontSizes: {
@@ -132,43 +123,10 @@ export default {
     //     { value: '72px', text: '72' },
     // ],
 
-    colors: [
-        '#000000',
-        '#ffffff',
-        '#eeece0',
-        '#1c487f',
-        '#4d80bf',
-        '#c24f4a',
-        '#8baa4a',
-        '#7b5ba1',
-        '#46acc8',
-        '#f9963b',
-    ],
+    colors: ['#000000', '#ffffff', '#eeece0', '#1c487f', '#4d80bf', '#c24f4a', '#8baa4a', '#7b5ba1', '#46acc8', '#f9963b'],
 
     //插入代码语言配置
-    languageType: [
-        'Bash',
-        'C',
-        'C#',
-        'C++',
-        'CSS',
-        'Java',
-        'JavaScript',
-        'JSON',
-        'TypeScript',
-        'Plain text',
-        'Html',
-        'XML',
-        'SQL',
-        'Go',
-        'Kotlin',
-        'Lua',
-        'Markdown',
-        'PHP',
-        'Python',
-        'Shell Session',
-        'Ruby',
-    ],
+    languageType: ['Bash', 'C', 'C#', 'C++', 'CSS', 'Java', 'JavaScript', 'JSON', 'TypeScript', 'Plain text', 'Html', 'XML', 'SQL', 'Go', 'Kotlin', 'Lua', 'Markdown', 'PHP', 'Python', 'Shell Session', 'Ruby'],
 
     languageTab: '　　　　',
     /**
@@ -183,10 +141,7 @@ export default {
             // type -> 'emoji' / 'image'
             type: 'emoji',
             // content -> 数组
-            content:
-                '😀 😃 😄 😁 😆 😅 😂 🤣 😊 😇 🙂 🙃 😉 😌 😍 😘 😗 😙 😚 😋 😛 😝 😜 🤓 😎 😏 😒 😞 😔 😟 😕 🙁 😣 😖 😫 😩 😢 😭 😤 😠 😡 😳 😱 😨 🤗 🤔 😶 😑 😬 🙄 😯 😴 😷 🤑 😈 🤡 💩 👻 💀 👀 👣'.split(
-                    /\s/
-                ),
+            content: '😀 😃 😄 😁 😆 😅 😂 🤣 😊 😇 🙂 🙃 😉 😌 😍 😘 😗 😙 😚 😋 😛 😝 😜 🤓 😎 😏 😒 😞 😔 😟 😕 🙁 😣 😖 😫 😩 😢 😭 😤 😠 😡 😳 😱 😨 🤗 🤔 😶 😑 😬 🙄 😯 😴 😷 🤑 😈 🤡 💩 👻 💀 👀 👣'.split(/\s/),
         },
         {
             // tab 的标题
@@ -194,10 +149,7 @@ export default {
             // type -> 'emoji' / 'image'
             type: 'emoji',
             // content -> 数组
-            content:
-                '👐 🙌 👏 🤝 👍 👎 👊 ✊ 🤛 🤜 🤞 ✌️ 🤘 👌 👈 👉 👆 👇 ☝️ ✋ 🤚 🖐 🖖 👋 🤙 💪 🖕 ✍️ 🙏'.split(
-                    /\s/
-                ),
+            content: '👐 🙌 👏 🤝 👍 👎 👊 ✊ 🤛 🤜 🤞 ✌️ 🤘 👌 👈 👉 👆 👇 ☝️ ✋ 🤚 🖐 🖖 👋 🤙 💪 🖕 ✍️ 🙏'.split(/\s/),
         },
     ],
 

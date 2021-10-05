@@ -33,7 +33,6 @@ class ImageDepot extends PanelMenu implements MenuActive {
         }
         super($elem, editor)
         this.imgPanelConfig = imgPanelConfig
-        console.log(this.imgPanelConfig)
         // 绑定事件，如粘贴图片
         bindEvent(editor)
     }

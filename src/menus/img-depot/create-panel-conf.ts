@@ -120,45 +120,46 @@ export default function (editor: Editor): ImgPanelConf {
     // 配置图库显示图片 给对应图片增加点击插入富文本编辑器的事件
     let depotDom = ''
     let events: any[] = []
-    config.depotImgServer.forEach((item, index) => {
-        const imgId = getRandom('depot-img')
-        depotDom += `
+    if (config.depotImgServer.length > 0) {
+        config.depotImgServer.forEach((item, index) => {
+            const imgId = getRandom('depot-img')
+            depotDom += `
         <div class="img-depot-item-wrap" src="${item}">
             <img id="${imgId}" class="img-depot-item" src="${item}" />
         </div>
         `
-        events.push({
-            selector: '#' + imgId,
-            type: 'click',
-            fn: () => {
-                const $linkUrl = $('#' + imgId).attr('src')
-                const url = $linkUrl.trim()
-                console.log(url)
-                //如果url为空则直接返回
-                if (!url) return
+            events.push({
+                selector: '#' + imgId,
+                type: 'click',
+                fn: () => {
+                    const $linkUrl = $('#' + imgId).attr('src')
+                    const url = $linkUrl.trim()
+                    //如果url为空则直接返回
+                    if (!url) return
 
-                let linkUrlAltText
-                if (config.showLinkImgAlt) {
-                    linkUrlAltText = $('#' + imgId)
-                        .attr('src')
-                        .trim()
-                }
-                let linkUrlHrefText
-                if (config.showLinkImgHref) {
-                    linkUrlHrefText = $('#' + imgId)
-                        .attr('src')
-                        .trim()
-                }
-                //如果不能通过校验也直接返回
-                if (!checkLinkImg(url, linkUrlAltText, linkUrlHrefText)) return
-                //插入图片url
-                uploadImg.insertImg(url, linkUrlAltText, linkUrlHrefText)
-                // 返回 true 表示函数执行结束之后关闭 panel
-                return true
-            },
-            bindEnter: true,
+                    let linkUrlAltText
+                    if (config.showLinkImgAlt) {
+                        linkUrlAltText = $('#' + imgId)
+                            .attr('src')
+                            .trim()
+                    }
+                    let linkUrlHrefText
+                    if (config.showLinkImgHref) {
+                        linkUrlHrefText = $('#' + imgId)
+                            .attr('src')
+                            .trim()
+                    }
+                    //如果不能通过校验也直接返回
+                    if (!checkLinkImg(url, linkUrlAltText, linkUrlHrefText)) return
+                    //插入图片url
+                    uploadImg.insertImg(url, linkUrlAltText, linkUrlHrefText)
+                    // 返回 true 表示函数执行结束之后关闭 panel
+                    return true
+                },
+                bindEnter: true,
+            })
         })
-    })
+    }
 
     const tabsConf: PanelTabConf[] = [
         // first tab
@@ -199,13 +200,7 @@ export default function (editor: Editor): ImgPanelConf {
         conf.onlyUploadConf = undefined
     }
     // 显示“上传图片”
-    if (
-        window.FileReader &&
-        (config.uploadImgShowBase64 ||
-            config.uploadImgServer ||
-            config.customUploadImg ||
-            config.uploadImgFromMedia)
-    ) {
+    if (window.FileReader && (config.uploadImgShowBase64 || config.uploadImgServer || config.customUploadImg || config.uploadImgFromMedia)) {
         conf.tabs.push(tabsConf[0])
     }
 

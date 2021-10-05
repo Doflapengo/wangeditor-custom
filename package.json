@@ -1,12 +1,10 @@
 {
-  "name": "wangeditor",
-  "version": "4.7.8",
-  "description": "wangEditor - 轻量级 web 富文本编辑器，配置方便，使用简单，开源免费",
-  "homepage": "http://www.wangeditor.com/",
+  "name": "wangeditor-custom",
+  "version": "1.1.1",
+  "description": "根据 wangEditor 进行二开的项目",
+  "homepage": "",
   "keywords": [
-    "wangEditor",
-    "富文本编辑器",
-    "富文本"
+    "wangEditor-custom"
   ],
   "main": "dist/wangEditor.min.js",
   "types": "dist/wangEditor.d.ts",
@@ -34,12 +32,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/wangeditor-team/wangEditor.git"
+    "url": "git+https://github.com/Doflapengo/wangeditor-custom.git"
   },
   "author": "",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/wangeditor-team/wangEditor/issues"
+    "url": "https://github.com/Doflapengo/wangeditor-custom/issues"
   },
   "devDependencies": {
     "@babel/core": "^7.11.6",

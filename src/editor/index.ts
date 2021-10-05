@@ -14,7 +14,7 @@ import initDom, { selectorValidator } from './init-fns/init-dom'
 import initSelection from './init-fns/init-selection'
 import bindEvent from './init-fns/bind-event'
 import i18nextInit from './init-fns/i18next-init'
-import initFullScreen, { setUnFullScreen, setFullScreen } from './init-fns/set-full-screen'
+// import initFullScreen, { setUnFullScreen, setFullScreen } from './init-fns/set-full-screen'
 import scrollToHead from './init-fns/scroll-to-head'
 import ZIndex from './z-index'
 import Change from './change/index'
@@ -159,7 +159,7 @@ class Editor {
         this.menus.init()
 
         // 初始化全屏功能
-        initFullScreen(this)
+        // initFullScreen(this)
 
         // 初始化选区，将光标定位到内容尾部
         this.initSelection(true)
@@ -199,16 +199,16 @@ class Editor {
     /**
      * 将编辑器设置为全屏
      */
-    public fullScreen(): void {
-        setFullScreen(this)
-    }
+    // public fullScreen(): void {
+    //     setFullScreen(this)
+    // }
 
     /**
      * 将编辑器退出全屏
      */
-    public unFullScreen(): void {
-        setUnFullScreen(this)
-    }
+    // public unFullScreen(): void {
+    //     setUnFullScreen(this)
+    // }
 
     /**
      * 滚动到指定标题锚点

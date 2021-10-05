@@ -14,6 +14,8 @@ import './assets/style/table.less'
 
 import './utils/polyfill'
 import Editor from './editor/index'
+// import _ from 'lodash'
+// ;(window as any)._ = _
 
 export * from './menus/menu-constructors/index'
 

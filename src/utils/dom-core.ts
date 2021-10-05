@@ -622,6 +622,24 @@ export class DomElement<T extends DomElementSelector = DomElementSelector> {
     }
 
     /**
+     * 设置/获取 元素 html
+     * @param val html 值
+     */
+    clearHtml(): string
+    clearHtml(val: string): DomElement
+    clearHtml(val?: string): DomElement | string {
+        const elem = this.elems[0]
+        //  if (!val) {
+        //      // 获取 html
+        //      return elem.innerHTML
+        //  } else {
+        //      // 设置 html
+        elem.innerHTML = '<br>'
+        return this
+        //  }
+    }
+
+    /**
      * 获取元素 value
      */
     val(): string {

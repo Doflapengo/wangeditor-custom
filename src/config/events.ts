@@ -9,6 +9,9 @@ export type TCatalog = {
     tag: string
     id: string
     text: string
+    level?: string
+    serial?: string
+    pId?: number
 }
 
 /**

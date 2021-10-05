@@ -27,7 +27,12 @@ import Table from './table/index'
 import Code from './code'
 import SplitLine from './split-line/index'
 import Todo from './todo'
-import ImgDepot from './img-depot'
+import ImgDepot from './img-depot' // 图库
+import Head_1 from './head-1' // 一级标题
+import Head_2 from './head-2' // 二级标题
+import Head_3 from './head-3' // 三级标题
+import Head_4 from './head-4' // 四级标题
+import Head_5 from './head-5' // 五级标题
 
 export type MenuListType = {
     [key: string]: any
@@ -59,4 +64,9 @@ export default {
     splitLine: SplitLine,
     todo: Todo,
     imgDepot: ImgDepot,
+    'head-1': Head_1,
+    'head-2': Head_2,
+    'head-3': Head_3,
+    'head-4': Head_4,
+    'head-5': Head_5,
 }
