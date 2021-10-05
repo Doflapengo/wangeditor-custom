@@ -75,71 +75,19 @@ class Head extends BtnMenu implements MenuActive {
      * @param value value
      */
     public command(value: string): void {
+        /**
+         * 1. 获取当前元素，
+         * 2. 判断当前元素的第一层父级是不是 div 这是个bug
+         * 3. 如果是 将 div 删除再插入 标题标签
+         * 4. 获取当前页面的内的所用 标题标签 然后 循环套循环的设置标题 序号
+         */
         const editor = this.editor
-        const tagName = editor.selection?.getSelectionContainerElem()?.elems[0].tagName
+        const tagName = editor.selection?.getSelectionContainerElem()?.elems[0] as Element
         const innerHtml = editor.selection?.getSelectionContainerElem()?.elems[0]?.innerHTML as string
+        console.log((tagName.parentNode as Element).className)
         const cursorPrevElem = editor.selection?.getSelectionContainerElem()?.elems[0].previousSibling as Element
         const levelHead_1 = this.getAssignLevelElem(cursorPrevElem, 1) as Element
         let html = ''
-        if (tagName !== 'H1') {
-            if (!isNaN(Number(innerHtml.slice(0, 1)))) {
-                html = innerHtml.slice(innerHtml.indexOf(' ') + 1)
-            } else {
-                // 不是标题
-                html = innerHtml
-            }
-            if (levelHead_1) {
-                let head_1_serial = levelHead_1.getAttribute('serial')
-                this.headData = {
-                    id: Number(window.headsData[window.headsData.length - 1].id) + 1,
-                    level: 1,
-                    serial: Number(head_1_serial) + 1,
-                    pid: 0,
-                    currentTitle: `${Number(head_1_serial) + 1}`,
-                }
-                this.headHtml = `<h1 level="${this.headData.level}" uniqueid="${this.headData.id}" serial="${this.headData.serial}" pid="${this.headData.pid}" currentTitle="${this.headData.currentTitle}">${this.headData.currentTitle} ${html}</h1>`
-            } else {
-                if (window.headsData.length > 0) {
-                    let head_1_data = window.headsData.filter(item => item.level === 1)
-                    if (head_1_data.length > 0) {
-                        let lasthead_1 = head_1_data[head_1_data.length - 1]
-                        console.log(lasthead_1)
-                        this.headData = {
-                            id: Number(window.headsData[window.headsData.length - 1].id) + 1,
-                            level: 1,
-                            serial: lasthead_1.serial + 1,
-                            pid: 0,
-                            currentTitle: `${lasthead_1.serial + 1}`,
-                        }
-                    } else {
-                        this.headData = {
-                            id: 1,
-                            level: 1,
-                            serial: 1,
-                            pid: 0,
-                            currentTitle: `1`,
-                        }
-                    }
-                } else {
-                    this.headData = {
-                        id: 1,
-                        level: 1,
-                        serial: 1,
-                        pid: 0,
-                        currentTitle: `1`,
-                    }
-                }
-
-                this.headHtml = `<h1 level="${this.headData.level}" uniqueid="${this.headData.id}" serial="${this.headData.serial}" pid="${this.headData.pid}" currentTitle="${this.headData.currentTitle}">${this.headData.currentTitle} ${html}</h1>`
-            }
-            $(editor.selection?.getSelectionContainerElem()?.elems[0]).clearHtml()
-            editor.cmd.do('insertHTML', this.headHtml)
-            window.headsData.push(this.headData)
-        }
-        window.oldCatalogs = this.oldCatalogs || []
-
-        // 标题设置成功且不是<p>正文标签就配置大纲id
-        value !== '<p>' && this.addUidForSelectionElem()
     }
 
     /**
