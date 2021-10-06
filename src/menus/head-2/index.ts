@@ -27,6 +27,10 @@ declare global {
     }
 }
 
+interface jqElem {
+    html: any
+}
+
 class Head extends BtnMenu implements MenuActive {
     oldCatalogs: TCatalog[] | undefined
 
@@ -34,7 +38,7 @@ class Head extends BtnMenu implements MenuActive {
     headData: headItem
 
     constructor(editor: Editor) {
-        const $elem = $('<div class="w-e-menu" data-title="二级标题" ><span class="h2">H2</span></div>')
+        const $elem = $('<div class="w-e-menu" data-title="二级标题">H2</div>')
         super($elem, editor)
         // 绑定事件
         bindEvent(editor)
@@ -76,106 +80,30 @@ class Head extends BtnMenu implements MenuActive {
      */
     public command(value: string): void {
         const editor = this.editor
-        const tagName = editor.selection?.getSelectionContainerElem()?.elems[0].tagName
+        const tagName = editor.selection?.getSelectionContainerElem()?.elems[0] as Element
         const innerHtml = editor.selection?.getSelectionContainerElem()?.elems[0]?.innerHTML as string
-        const cursorPrevElem = editor.selection?.getSelectionContainerElem()?.elems[0].previousSibling as Element
-        const levelHead_1 = this.getAssignLevelElem(cursorPrevElem, 1) as Element
-        const levelHead_2 = this.getAssignLevelElem(cursorPrevElem, 2) as Element
-        let html = ''
-        if (tagName !== 'H2') {
-            if (!isNaN(Number(innerHtml.slice(0, 1)))) {
-                html = innerHtml.slice(innerHtml.indexOf(' ') + 1)
-            } else {
-                // 不是标题
-                html = innerHtml
-            }
-            if (levelHead_1) {
-                // 没有 兄标题， 但有 一级标题 父标题， 生成子标题
-                let head_1_currentTitle = levelHead_1.getAttribute('currenttitle')
-                let head_1_uniqueid = levelHead_1.getAttribute('uniqueid')
 
-                if (cursorPrevElem.tagName === 'H2') {
-                    let head_2_serial = cursorPrevElem.getAttribute('serial')
-                    let head_2_parentSerial = (cursorPrevElem.getAttribute('currenttitle') as string).split('.')[0]
-                    this.headData = {
-                        id: Number(window.headsData[window.headsData.length - 1].id) + 1,
-                        level: 2,
-                        serial: Number(head_2_serial) + 1,
-                        pid: 0,
-                        currentTitle: `${head_2_parentSerial}.${Number(head_2_serial) + 1}`,
-                    }
-                } else if (cursorPrevElem.tagName === 'H1') {
-                    this.headData = {
-                        id: Number(window.headsData[window.headsData.length - 1].id) + 1,
-                        level: 2,
-                        serial: 1,
-                        pid: Number(head_1_uniqueid),
-                        currentTitle: `${head_1_currentTitle}.1`,
-                    }
-                } else {
-                    let head_1_uniqueid = levelHead_1.getAttribute('uniqueid')
-                    let head_1_parentSerial = (levelHead_1.getAttribute('currenttitle') as string).split('.')[0]
-                    this.headData = {
-                        id: Number(window.headsData[window.headsData.length - 1].id) + 1,
-                        level: 2,
-                        serial: 1,
-                        pid: Number(head_1_uniqueid),
-                        currentTitle: `${head_1_parentSerial}.1`,
-                    }
-                }
-            } else {
-                // 在当前实例中 既没有兄标题 也没有父标题
-                if (window.headsData.length > 0) {
-                    // 在全局表里 headsData 中 判断 从后往前 查， 先查 二级标题， 有就生成弟标题
-                    // 没有就差 一级标题，有就生成 第一个 子标题
-                    // 如果都没有， 可能是 三级 四级， 直接生成 1.1 的二级标题 ，截取 innerHTML 的空格后的内容
-                    const headData_2 = window.headsData.filter(item => item.level === 2)
-                    const headData_1 = window.headsData.filter(item => item.level === 1)
-                    if (headData_2.length > 0) {
-                        const parentHeadData = window.headsData.filter(item => (item.id = Number(headData_2[headData_2.length - 1].pid)))
-                        this.headData = {
-                            id: Number(window.headsData[window.headsData.length - 1].id) + 1,
-                            level: 2,
-                            serial: Number(headData_2[headData_2.length - 1].serial) + 1,
-                            pid: Number(headData_2[headData_2.length - 1].pid),
-                            currentTitle: `${parentHeadData[0].serial}.${Number(headData_2[headData_2.length - 1].serial) + 1}`,
-                        }
-                    } else if (headData_1.length > 0) {
-                        this.headData = {
-                            id: Number(window.headsData[window.headsData.length - 1].id) + 1,
-                            level: 2,
-                            serial: 1,
-                            pid: Number(headData_1[headData_1.length - 1].id),
-                            currentTitle: `${headData_1[headData_1.length - 1].serial}.1`,
-                        }
-                    } else {
-                        this.headData = {
-                            id: Number(window.headsData[window.headsData.length - 1].id) + 1,
-                            level: 2,
-                            serial: 1,
-                            pid: 1,
-                            currentTitle: `1.1`,
-                        }
-                    }
-                } else {
-                    this.headData = {
-                        id: 1,
-                        level: 2,
-                        serial: 1,
-                        pid: 1,
-                        currentTitle: `1.1`,
-                    }
-                }
-            }
-            this.headHtml = `<h2 level="${this.headData.level}" uniqueid="${this.headData.id}" serial="${this.headData.serial}" pid="${this.headData.pid}" currentTitle="${this.headData.currentTitle}">${this.headData.currentTitle} ${html}</h2>`
+        if (tagName.classList.value !== 'h2') {
+            this.headHtml = `<p class="h2">${innerHtml}</p>`
             $(editor.selection?.getSelectionContainerElem()?.elems[0]).clearHtml()
             editor.cmd.do('insertHTML', this.headHtml)
-            window.headsData.push(this.headData)
         }
-        window.oldCatalogs = this.oldCatalogs || []
+        this.setHeadSerial(editor)
+    }
 
-        // 标题设置成功且不是<p>正文标签就配置大纲id
-        value !== '<p>' && this.addUidForSelectionElem()
+    public setHeadSerial(editor: Editor) {
+        window.jq('.h1').each((index_1: number, elem_1: jqElem) => {
+            window.jq(elem_1).find('span').remove()
+            window.jq(elem_1).prepend(`<span>${index_1 + 1} </span>`)
+            window
+                .jq(elem_1)
+                .nextAll('.h2')
+                .each((index_2: number, elem_2: jqElem) => {
+                    window.jq(elem_2).find('span').remove()
+                    window.jq(elem_2).prepend(`<span>${index_1 + 1}.${index_2 + 1} </span>`)
+                })
+        })
+        editor.selection.collapseRange()
     }
 
     /**

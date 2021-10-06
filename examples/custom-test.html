@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>custom-test</title>
   <script src="../dist/wangEditor.js"></script>
-  <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <!-- <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script> -->
 </head>
 
 <body>
@@ -19,7 +19,7 @@
   var E = window.wangEditor
   var editor = new E('#app')
 
-  editor.config.menuTooltipPosition = 'down'
+  // editor.config.menuTooltipPosition = 'down'
   // editor.config.uploadImgServer = 'https://www.baidu.com'
   // 配置图库数据
   editor.config.depotImgServer = [
@@ -30,17 +30,17 @@
   editor.config.customUploadImg = function (resultFiles, insertImgFn) {
     let formData = new FormData()
     formData.append('pic', resultFiles[0])
-    $.ajax({
-      url: 'http://localhost:3000/upload',
-      type: 'POST',
-      data: formData,
-      contentType: false,
-      processData: false,
-      success(res) {
-        console.log(res)
-        // insertImgFn(imgUrl)
-      }
-    })
+    // $.ajax({
+    //   url: 'http://localhost:3000/upload',
+    //   type: 'POST',
+    //   data: formData,
+    //   contentType: false,
+    //   processData: false,
+    //   success(res) {
+    //     console.log(res)
+    //     // insertImgFn(imgUrl)
+    //   }
+    // })
     console.log(formData)
   }
   editor.config.onCatalogChange = function (headList) {
@@ -51,7 +51,7 @@
 
   // 第二个富文本编辑器
   var editor2 = new E('#app2')
-  editor2.config.menuTooltipPosition = 'down'
+  // editor2.config.menuTooltipPosition = 'down'
   // editor.config.uploadImgServer = 'https://www.baidu.com'
   // 配置图库数据
   editor2.config.depotImgServer = [
@@ -62,17 +62,17 @@
   editor2.config.customUploadImg = function (resultFiles, insertImgFn) {
     let formData = new FormData()
     formData.append('pic', resultFiles[0])
-    $.ajax({
-      url: 'http://localhost:3000/upload',
-      type: 'POST',
-      data: formData,
-      contentType: false,
-      processData: false,
-      success(res) {
-        console.log(res)
-        // insertImgFn(imgUrl)
-      }
-    })
+    // $.ajax({
+    //   url: 'http://localhost:3000/upload',
+    //   type: 'POST',
+    //   data: formData,
+    //   contentType: false,
+    //   processData: false,
+    //   success(res) {
+    //     console.log(res)
+    //     // insertImgFn(imgUrl)
+    //   }
+    // })
     console.log(formData)
   }
   editor2.config.onCatalogChange = function (headList) {
@@ -82,7 +82,7 @@
   editor2.create()
 
 
-  $('#btn').click(function () {
+  // $('#btn').click(function () {
     // console.log(window.oldCatalogs)
 
     // console.log(window.getSelection().anchorNode.parentNode)
@@ -91,13 +91,13 @@
     // console.log(window.getSelection().baseNode.parentElement)
     // let cursorParentElem = window.getSelection().anchorNode.parentNode || window.getSelection().focusNode.parentNode
     // console.log(cursorParentElem.previousSibling)
-    console.log($('h1'))
-    $('h1').each((index, item) => {
-      // console.log(item, index)
-      item.innerHTML = `${index + 1} ${item.innerHTML}`
-      console.log($(item).nextAll('h2'))
-    })
-  });
+    // console.log($('h1'))
+    // $('h1').each((index, item) => {
+    //   // console.log(item, index)
+    //   item.innerHTML = `${index + 1} ${item.innerHTML}`
+    //   console.log($(item).nextAll('h2'))
+    // })
+  // });
 </script>
 
 </html>

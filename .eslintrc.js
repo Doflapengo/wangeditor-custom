@@ -28,5 +28,6 @@ module.exports = {
         'prettier/prettier': 'off',
         'no-unreachable': 'warn',
         'no-useless-return': 'warn',
+        'max-len': 'off',
     },
 }

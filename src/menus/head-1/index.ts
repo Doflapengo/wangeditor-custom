@@ -27,6 +27,10 @@ declare global {
     }
 }
 
+interface jqElem {
+    html: any
+}
+
 class Head extends BtnMenu implements MenuActive {
     oldCatalogs: TCatalog[] | undefined
 
@@ -34,7 +38,7 @@ class Head extends BtnMenu implements MenuActive {
     headData: headItem
 
     constructor(editor: Editor) {
-        const $elem = $('<div class="w-e-menu" data-title="一级标题" ><span class="h1">H1</span></div>')
+        const $elem = $('<div class="w-e-menu" data-title="一级标题">H1</div>')
         super($elem, editor)
         // 绑定事件
         bindEvent(editor)
@@ -76,7 +80,7 @@ class Head extends BtnMenu implements MenuActive {
      */
     public command(value: string): void {
         /**
-         * 1. 获取当前元素，
+         * 1. 获取当前元素，当前元素是不是 p 还是 div
          * 2. 判断当前元素的第一层父级是不是 div 这是个bug
          * 3. 如果是 将 div 删除再插入 标题标签
          * 4. 获取当前页面的内的所用 标题标签 然后 循环套循环的设置标题 序号
@@ -84,10 +88,20 @@ class Head extends BtnMenu implements MenuActive {
         const editor = this.editor
         const tagName = editor.selection?.getSelectionContainerElem()?.elems[0] as Element
         const innerHtml = editor.selection?.getSelectionContainerElem()?.elems[0]?.innerHTML as string
-        console.log((tagName.parentNode as Element).className)
-        const cursorPrevElem = editor.selection?.getSelectionContainerElem()?.elems[0].previousSibling as Element
-        const levelHead_1 = this.getAssignLevelElem(cursorPrevElem, 1) as Element
-        let html = ''
+        if (tagName.classList.value !== 'h1') {
+            this.headHtml = `<p class="h1">${innerHtml}</p>`
+            $(editor.selection?.getSelectionContainerElem()?.elems[0]).clearHtml()
+            editor.cmd.do('insertHTML', this.headHtml)
+        }
+        this.setHeadSerial(editor)
+    }
+
+    public setHeadSerial(editor: Editor) {
+        window.jq('.h1').each((index_1: number, elem_1: jqElem) => {
+            window.jq(elem_1).find('span').remove()
+            window.jq(elem_1).prepend(`<span>${index_1 + 1} </span>`)
+        })
+        editor.selection.collapseRange()
     }
 
     /**

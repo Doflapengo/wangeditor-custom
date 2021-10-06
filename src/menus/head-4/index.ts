@@ -27,6 +27,10 @@ declare global {
     }
 }
 
+interface jqElem {
+    html: any
+}
+
 class Head extends BtnMenu implements MenuActive {
     oldCatalogs: TCatalog[] | undefined
 
@@ -34,7 +38,7 @@ class Head extends BtnMenu implements MenuActive {
     headData: headItem
 
     constructor(editor: Editor) {
-        const $elem = $('<div class="w-e-menu" data-title="四级标题" ><span class="h4">H4</span></div>')
+        const $elem = $('<div class="w-e-menu" data-title="四级标题" >H4</div>')
         super($elem, editor)
         // 绑定事件
         bindEvent(editor)
@@ -76,143 +80,47 @@ class Head extends BtnMenu implements MenuActive {
      */
     public command(value: string): void {
         const editor = this.editor
-        const tagName = editor.selection?.getSelectionContainerElem()?.elems[0].tagName
+        const tagName = editor.selection?.getSelectionContainerElem()?.elems[0] as Element
         const innerHtml = editor.selection?.getSelectionContainerElem()?.elems[0]?.innerHTML as string
-        const cursorPrevElem = editor.selection?.getSelectionContainerElem()?.elems[0].previousSibling as Element
-        console.log(innerHtml)
-        const levelHead_1 = this.getAssignLevelElem(cursorPrevElem, 1) as Element
-        const levelHead_2 = this.getAssignLevelElem(cursorPrevElem, 2) as Element
-        const levelHead_3 = this.getAssignLevelElem(cursorPrevElem, 3) as Element
-        const levelHead_4 = this.getAssignLevelElem(cursorPrevElem, 4) as Element
-        let html = ''
-        if (tagName !== 'H4') {
-            if (!isNaN(Number(innerHtml.slice(0, 1)))) {
-                html = innerHtml.slice(innerHtml.indexOf(' ') + 1)
-            } else {
-                // 不是标题
-                html = innerHtml
-            }
-            if (levelHead_1) {
-                if (levelHead_2) {
-                    if (levelHead_3) {
-                        if (levelHead_4) {
-                            // 有一级 并且 有二级 并且 有三级 并且 有四级标题
-                            let head_4_serial = levelHead_4.getAttribute('serial')
-                            let head_4_pid = levelHead_4.getAttribute('pid')
-                            let head_4_currtTitle = (levelHead_4.getAttribute('currenttitle') as string).split('.')
-                            head_4_currtTitle.pop()
-                            let cursorTitle = head_4_currtTitle.join('.')
-                            this.headData = {
-                                id: Number(window.headsData[window.headsData.length - 1].id) + 1,
-                                level: 4,
-                                serial: Number(head_4_serial) + 1,
-                                pid: Number(head_4_pid),
-                                currentTitle: `${cursorTitle}.${Number(head_4_serial) + 1}`,
-                            }
-                        } else {
-                            // 有一级 并且 有二级 并且 有三级 但是 没有四级标题
-                            let head_3_currtTitle = levelHead_3.getAttribute('currenttitle')
-                            let head_3_id = levelHead_3.getAttribute('id')
-                            this.headData = {
-                                id: Number(window.headsData[window.headsData.length - 1].id) + 1,
-                                level: 4,
-                                serial: 1,
-                                pid: Number(head_3_id),
-                                currentTitle: `${head_3_currtTitle}.1`,
-                            }
-                        }
-                    } else {
-                        // 有一级 并且 有二级 但是 没有 三级
-                        let head_2_currtTitle = levelHead_2.getAttribute('currenttitle')
-                        let head_2_id = levelHead_2.getAttribute('id')
-                        this.headData = {
-                            id: Number(window.headsData[window.headsData.length - 1].id) + 1,
-                            level: 4,
-                            serial: 1,
-                            pid: Number(head_2_id),
-                            currentTitle: `${head_2_currtTitle}.1.1`,
-                        }
-                    }
-                } else {
-                    // 有一级 但是 没有二级
-                    let head_1_id = levelHead_1.getAttribute('uniqueid')
-                    this.headData = {
-                        id: Number(window.headsData[window.headsData.length - 1].id) + 1,
-                        level: 4,
-                        serial: 1,
-                        pid: Number(head_1_id),
-                        currentTitle: `1.1.1.1`,
-                    }
-                }
-            }
 
-            if (window.headsData.length > 0) {
-                let head_1_datas = window.headsData.filter(item => item.level === 1)
-                if (head_1_datas.length > 0) {
-                    let head_2_datas = window.headsData.filter(item => item.level === 2)
-                    if (head_2_datas.length > 0) {
-                        let head_3_data = window.headsData.filter(item => item.level === 3)
-                        if (head_3_data.length > 0) {
-                            let head_4_datas = window.headsData.filter(item => item.level === 4)
-                            if (head_4_datas.length > 0) {
-                                // 有一级 并且 有二级 并且 有三级 并且 有四级
-                                let last_4_head = head_4_datas[head_4_datas.length - 1]
-                                let head_4_currtTitle = last_4_head.currentTitle.split('.')
-                                head_4_currtTitle.pop()
-                                let cursorTitle = head_4_currtTitle.join('.')
-                                this.headData = {
-                                    id: Number(window.headsData[window.headsData.length - 1].id) + 1,
-                                    level: 4,
-                                    serial: Number(last_4_head.serial) + 1,
-                                    pid: Number(last_4_head.pid),
-                                    currentTitle: `${cursorTitle}.${Number(last_4_head.serial) + 1}`,
-                                }
-                            } else {
-                                // 有一级 并且 有二级 并且 有三级 并且 没有四级
-                                let last_3_head = head_3_data[head_3_data.length - 1]
-                                let head_3_currtTitle = last_3_head.currentTitle.split('.')
-                                this.headData = {
-                                    id: Number(window.headsData[window.headsData.length - 1].id) + 1,
-                                    level: 4,
-                                    serial: 1,
-                                    pid: Number(last_3_head.id),
-                                    currentTitle: `${head_3_currtTitle}.1`,
-                                }
-                            }
-                        } else {
-                            // 有一级 并且 有二级 但是 没有 三级
-                            let last_2_head = head_2_datas[head_2_datas.length - 1]
-                            this.headData = {
-                                id: Number(window.headsData[window.headsData.length - 1].id) + 1,
-                                level: 4,
-                                serial: 1,
-                                pid: Number(last_2_head.id),
-                                currentTitle: `${last_2_head.currtTitle}.1.1`,
-                            }
-                        }
-                    } else {
-                        // 有一级 但是 没有二级
-                        let last_1_head = head_1_datas[head_1_datas.length - 1]
-                        this.headData = {
-                            id: Number(window.headsData[window.headsData.length - 1].id) + 1,
-                            level: 4,
-                            serial: 1,
-                            pid: Number(last_1_head.id),
-                            currentTitle: `1.1.1.1`,
-                        }
-                    }
-                }
-            }
-
-            this.headHtml = `<h4 level="${this.headData.level}" uniqueid="${this.headData.id}" serial="${this.headData.serial}" pid="${this.headData.pid}" currentTitle="${this.headData.currentTitle}">${this.headData.currentTitle} ${html}</h4>`
+        if (tagName.classList.value !== 'h4') {
+            this.headHtml = `<p class="h4">${innerHtml}</p>`
             $(editor.selection?.getSelectionContainerElem()?.elems[0]).clearHtml()
             editor.cmd.do('insertHTML', this.headHtml)
-            window.headsData.push(this.headData)
         }
-        window.oldCatalogs = this.oldCatalogs || []
+        this.setHeadSerial(editor)
+    }
 
-        // 标题设置成功且不是<p>正文标签就配置大纲id
-        value !== '<p>' && this.addUidForSelectionElem()
+    public setHeadSerial(editor: Editor) {
+        window.jq('.h1').each((index_1: number, elem_1: jqElem) => {
+            window.jq(elem_1).find('span').remove()
+            window.jq(elem_1).prepend(`<span>${index_1 + 1} </span>`)
+
+            window
+                .jq(elem_1)
+                .nextAll('.h2')
+                .each((index_2: number, elem_2: jqElem) => {
+                    window.jq(elem_2).find('span').remove()
+                    window.jq(elem_2).prepend(`<span>${index_1 + 1}.${index_2 + 1} </span>`)
+
+                    window
+                        .jq(elem_2)
+                        .nextAll('.h3')
+                        .each((index_3: number, elem_3: jqElem) => {
+                            window.jq(elem_3).find('span').remove()
+                            window.jq(elem_3).prepend(`<span>${index_1 + 1}.${index_2 + 1}.${index_3 + 1} </span>`)
+
+                            window
+                                .jq(elem_3)
+                                .nextAll('.h4')
+                                .each((index_4: number, elem_4: jqElem) => {
+                                    window.jq(elem_4).find('span').remove()
+                                    window.jq(elem_4).prepend(`<span>${index_1 + 1}.${index_2 + 1}.${index_3 + 1}.${index_4 + 1} </span>`)
+                                })
+                        })
+                })
+        })
+        editor.selection.collapseRange()
     }
 
     /**

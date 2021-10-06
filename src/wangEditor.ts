@@ -2,7 +2,7 @@
  * @description 入口文件
  * @author wangfupeng
  */
-
+import jq from 'jquery'
 import './assets/style/common.less'
 import './assets/style/icon.less'
 import './assets/style/menus.less'
@@ -16,6 +16,14 @@ import './utils/polyfill'
 import Editor from './editor/index'
 // import _ from 'lodash'
 // ;(window as any)._ = _
+
+declare global {
+    interface Window {
+        jq: any
+    }
+}
+
+;(window as any).jq = jq
 
 export * from './menus/menu-constructors/index'
 

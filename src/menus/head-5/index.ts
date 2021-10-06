@@ -18,11 +18,26 @@ declare global {
     }
 }
 
+interface headItem {
+    id: number
+    level: number
+    serial: number
+    pid: number
+    currentTitle: string
+}
+
+interface jqElem {
+    html: any
+}
+
 class Head extends BtnMenu implements MenuActive {
     oldCatalogs: TCatalog[] | undefined
 
+    headHtml: string
+    headData: headItem
+
     constructor(editor: Editor) {
-        const $elem = $('<div class="w-e-menu" data-title="五级标题" ><span class="h5">H5</span></div>')
+        const $elem = $('<div class="w-e-menu" data-title="五级标题" >H5</div>')
         super($elem, editor)
         // 绑定事件
         bindEvent(editor)
@@ -34,6 +49,10 @@ class Head extends BtnMenu implements MenuActive {
             this.addListenerCatalog() // 监听文本框编辑时的大纲信息
             this.getCatalogs() // 初始有值的情况获取一遍大纲信息
         }
+
+        this.headHtml = ''
+        this.headData = { id: 1, level: 1, serial: 1, pid: 0, currentTitle: '1' }
+        window.headsData = []
     }
 
     public clickHandler(): void {
@@ -61,38 +80,54 @@ class Head extends BtnMenu implements MenuActive {
      */
     public command(value: string): void {
         const editor = this.editor
-        const $selectionElem = editor.selection.getSelectionContainerElem()
-        if (editor.selection?.getSelectionContainerElem()?.elems[0] !== undefined && $(editor.selection?.getSelectionContainerElem()?.elems[0]).attr('level') === '') {
-            let html = editor.selection?.getSelectionContainerElem()?.elems[0]?.innerHTML
+        const tagName = editor.selection?.getSelectionContainerElem()?.elems[0] as Element
+        const innerHtml = editor.selection?.getSelectionContainerElem()?.elems[0]?.innerHTML as string
+        if (tagName && tagName.classList.value !== 'h5') {
+            this.headHtml = `<p class="h5">${innerHtml}</p>`
             $(editor.selection?.getSelectionContainerElem()?.elems[0]).clearHtml()
-            if (this.oldCatalogs !== undefined && this.oldCatalogs.length > 0) {
-                let oldCatalogs = this.oldCatalogs[this.oldCatalogs.length - 1]
-                editor.cmd.do('insertHTML', `<h5 level="${Number(oldCatalogs?.level) + 1}" serial="${Number(oldCatalogs?.serial) + 1}">${Number(oldCatalogs?.serial) + 1}. ${html}</h5>`)
-            } else {
-                editor.cmd.do('insertHTML', `<h5 level="1" serial="1">1. ${html}</h5>`)
-            }
-            console.log(this.oldCatalogs)
-            window.oldCatalogs = this.oldCatalogs || []
+            editor.cmd.do('insertHTML', this.headHtml)
         }
+        this.setHeadSerial(editor)
+    }
 
-        if ($selectionElem && editor.$textElem.equal($selectionElem)) {
-            // 不能选中多行来设置标题，否则会出现问题
-            // 例如选中的是 <p>xxx</p><p>yyy</p> 来设置标题，设置之后会成为 <h1>xxx<br>yyy</h1> 不符合预期
-            this.setMultilineHead(value)
-        } else if ($selectionElem) {
-            // 选中内容包含序列，code，表格，分割线时不处理
-            // if (
-            //     ['OL', 'UL', 'LI', 'TABLE', 'TH', 'TR', 'CODE', 'HR'].indexOf(
-            //         $($selectionElem).getNodeName()
-            //     ) > -1
-            // ) {
-            //     return
-            // }
-            // editor.cmd.do('formatBlock', value)
-        }
+    public setHeadSerial(editor: Editor) {
+        window.jq('.h1').each((index_1: number, elem_1: jqElem) => {
+            window.jq(elem_1).find('span').remove()
+            window.jq(elem_1).prepend(`<span>${index_1 + 1} </span>`)
 
-        // 标题设置成功且不是<p>正文标签就配置大纲id
-        value !== '<p>' && this.addUidForSelectionElem()
+            window
+                .jq(elem_1)
+                .nextAll('.h2')
+                .each((index_2: number, elem_2: jqElem) => {
+                    window.jq(elem_2).find('span').remove()
+                    window.jq(elem_2).prepend(`<span>${index_1 + 1}.${index_2 + 1} </span>`)
+
+                    window
+                        .jq(elem_2)
+                        .nextAll('.h3')
+                        .each((index_3: number, elem_3: jqElem) => {
+                            window.jq(elem_3).find('span').remove()
+                            window.jq(elem_3).prepend(`<span>${index_1 + 1}.${index_2 + 1}.${index_3 + 1} </span>`)
+
+                            window
+                                .jq(elem_3)
+                                .nextAll('.h4')
+                                .each((index_4: number, elem_4: jqElem) => {
+                                    window.jq(elem_4).find('span').remove()
+                                    window.jq(elem_4).prepend(`<span>${index_1 + 1}.${index_2 + 1}.${index_3 + 1}.${index_4 + 1} </span>`)
+
+                                    window
+                                        .jq(elem_4)
+                                        .nextAll('.h5')
+                                        .each((index_5: number, elem_5: jqElem) => {
+                                            window.jq(elem_5).find('span').remove()
+                                            window.jq(elem_5).prepend(`<span>（${index_5 + 1}） </span>`)
+                                        })
+                                })
+                        })
+                })
+        })
+        editor.selection.collapseRange()
     }
 
     /**
