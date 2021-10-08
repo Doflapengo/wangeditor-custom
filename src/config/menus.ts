@@ -72,10 +72,12 @@ export default {
         'head-1', // 一级标题
         'head-2', // 二级标题
         'head-3', // 三级级标题
-        'head-4', // 三级级标题
-        'head-5', // 三级级标题
+        'head-4', // 四级级标题
+        'head-5', // 五级级标题
+        'text', // 正文
         'imgDepot', // 图库
         'table',
+        'frontCover',
     ],
 
     fontNames: ['黑体', '仿宋', '楷体', '标楷体', '华文仿宋', '华文楷体', '宋体', '微软雅黑', 'Arial', 'Tahoma', 'Verdana', 'Times New Roman', 'Courier New'],

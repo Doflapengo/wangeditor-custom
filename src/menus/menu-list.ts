@@ -33,6 +33,8 @@ import Head_2 from './head-2' // 二级标题
 import Head_3 from './head-3' // 三级标题
 import Head_4 from './head-4' // 四级标题
 import Head_5 from './head-5' // 五级标题
+import FrontCover from './front-cover' // 封皮
+import Text from './text' // 正文
 
 export type MenuListType = {
     [key: string]: any
@@ -69,4 +71,6 @@ export default {
     'head-3': Head_3,
     'head-4': Head_4,
     'head-5': Head_5,
+    frontCover: FrontCover,
+    text: Text,
 }

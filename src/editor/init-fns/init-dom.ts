@@ -37,14 +37,8 @@ export default function (editor: Editor): void {
         $toolbarSelector.append($toolbarElem).append($textContainerElem)
 
         // 自行创建的，需要配置默认的样式
-        $toolbarElem
-            .css('background-color', styleSettings.toolbarBgColor)
-            .css('border', styleSettings.border)
-            .css('border-bottom', styleSettings.toolbarBottomBorder)
-        $textContainerElem
-            .css('border', styleSettings.border)
-            .css('border-top', 'none')
-            .css('height', `${height}px`)
+        $toolbarElem.css('background-color', styleSettings.toolbarBgColor).css('border', styleSettings.border).css('border-bottom', styleSettings.toolbarBottomBorder)
+        $textContainerElem.css('border', styleSettings.border).css('border-top', 'none').css('height', `${height}px`)
     } else {
         // toolbarSelector 和 textSelector 都有
         $toolbarSelector.append($toolbarElem)
