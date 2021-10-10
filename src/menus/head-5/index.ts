@@ -11,6 +11,7 @@ import { getRandomCode } from '../../utils/util'
 import { TCatalog } from '../../config/events'
 import { EMPTY_P } from '../../utils/const'
 import bindEvent from './bind-event/index'
+import { ConfigType } from '../../config'
 
 declare global {
     interface Window {
@@ -36,6 +37,8 @@ class Head extends BtnMenu implements MenuActive {
     headHtml: string
     headData: headItem
 
+    config: ConfigType
+
     constructor(editor: Editor) {
         const $elem = $('<div class="w-e-menu" data-title="五级标题" >H5</div>')
         super($elem, editor)
@@ -53,6 +56,8 @@ class Head extends BtnMenu implements MenuActive {
         this.headHtml = ''
         this.headData = { id: 1, level: 1, serial: 1, pid: 0, currentTitle: '1' }
         window.headsData = []
+
+        this.config = editor.config
     }
 
     public clickHandler(): void {
@@ -91,42 +96,61 @@ class Head extends BtnMenu implements MenuActive {
     }
 
     public setHeadSerial(editor: Editor) {
-        window.jq('.h1').each((index_1: number, elem_1: jqElem) => {
-            window.jq(elem_1).find('span').remove()
-            window.jq(elem_1).prepend(`<span>${index_1 + 1} </span>`)
+        let currentElem = editor.selection?.getSelectionContainerElem()?.elems[0]
+        if (window.jq(currentElem).prevAll('.h1').length) {
+            // 当前元素 所在实例中 上面有 .h1 正常执行循环套循环
+            window.jq('.h1').each((index_1: number, elem_1: jqElem) => {
+                window.jq(elem_1).find('span').remove()
+                window.jq(elem_1).prepend(`<span>${index_1 + 1} </span>`)
 
-            window
-                .jq(elem_1)
-                .nextAll('.h2')
-                .each((index_2: number, elem_2: jqElem) => {
-                    window.jq(elem_2).find('span').remove()
-                    window.jq(elem_2).prepend(`<span>${index_1 + 1}.${index_2 + 1} </span>`)
+                window
+                    .jq(elem_1)
+                    .nextAll('.h2')
+                    .each((index_2: number, elem_2: jqElem) => {
+                        window.jq(elem_2).find('span').remove()
+                        window.jq(elem_2).prepend(`<span>${index_1 + 1}.${index_2 + 1} </span>`)
 
-                    window
-                        .jq(elem_2)
-                        .nextAll('.h3')
-                        .each((index_3: number, elem_3: jqElem) => {
-                            window.jq(elem_3).find('span').remove()
-                            window.jq(elem_3).prepend(`<span>${index_1 + 1}.${index_2 + 1}.${index_3 + 1} </span>`)
+                        window
+                            .jq(elem_2)
+                            .nextAll('.h3')
+                            .each((index_3: number, elem_3: jqElem) => {
+                                window.jq(elem_3).find('span').remove()
+                                window.jq(elem_3).prepend(`<span>${index_1 + 1}.${index_2 + 1}.${index_3 + 1} </span>`)
 
-                            window
-                                .jq(elem_3)
-                                .nextAll('.h4')
-                                .each((index_4: number, elem_4: jqElem) => {
-                                    window.jq(elem_4).find('span').remove()
-                                    window.jq(elem_4).prepend(`<span>${index_1 + 1}.${index_2 + 1}.${index_3 + 1}.${index_4 + 1} </span>`)
+                                window
+                                    .jq(elem_3)
+                                    .nextAll('.h4')
+                                    .each((index_4: number, elem_4: jqElem) => {
+                                        window.jq(elem_4).find('span').remove()
+                                        window.jq(elem_4).prepend(`<span>${index_1 + 1}.${index_2 + 1}.${index_3 + 1}.${index_4 + 1} </span>`)
 
-                                    window
-                                        .jq(elem_4)
-                                        .nextAll('.h5')
-                                        .each((index_5: number, elem_5: jqElem) => {
-                                            window.jq(elem_5).find('span').remove()
-                                            window.jq(elem_5).prepend(`<span>（${index_5 + 1}） </span>`)
-                                        })
-                                })
-                        })
-                })
-        })
+                                        window
+                                            .jq(elem_4)
+                                            .nextAll('.h5')
+                                            .each((index_5: number, elem_5: jqElem) => {
+                                                window.jq(elem_5).find('span').remove()
+                                                window.jq(elem_5).prepend(`<span>（${index_5 + 1}） </span>`)
+                                            })
+                                    })
+                            })
+                    })
+            })
+        } else {
+            // 当前实例中没有 .h1
+            // 判断当前实例有没有 .h5
+            if (window.jq(currentElem).prev('.h5').length) {
+                // 如果有正常排序生成
+                let prevH5 = window.jq(currentElem).prev('.h5')
+                let prevH5Str = prevH5.find('span').text().trim()
+                let prevNum = parseInt(prevH5Str.replace(/[^0-9]/gi, ''))
+                window.jq(currentElem).find('span').remove()
+                window.jq(currentElem).prepend(`<span>（${prevNum + 1}） </span>`)
+            } else {
+                // 如果没有从一开始
+                window.jq(currentElem).find('span').remove()
+                window.jq(currentElem).prepend(`<span>（1） </span>`)
+            }
+        }
         editor.selection.collapseRange()
     }
 

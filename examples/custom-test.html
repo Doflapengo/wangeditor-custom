@@ -11,8 +11,8 @@
 </head>
 
 <body>
-  <div id="app"></div>
-  <div id="app2"></div>
+  <div id="app" class="paper_item"></div>
+  <div id="app2" class="paper_item"></div>
   <button type="button" id="btn">click</button>
 </body>
 <script>
@@ -20,6 +20,7 @@
   var editor = new E('#app')
 
   editor.config.menuTooltipPosition = 'down'
+  editor.config.parentsPapers = '.paper_item'
   // editor.config.uploadImgServer = 'https://www.baidu.com'
   // 配置图库数据
   editor.config.depotImgServer = [
@@ -53,6 +54,7 @@
   var editor2 = new E('#app2')
   // editor2.config.menuTooltipPosition = 'down'
   // editor.config.uploadImgServer = 'https://www.baidu.com'
+  editor2.config.parentsPapers = '.paper_item'
   // 配置图库数据
   editor2.config.depotImgServer = [
     'https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png',

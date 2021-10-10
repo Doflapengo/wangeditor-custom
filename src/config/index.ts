@@ -3,13 +3,7 @@
  * @author wangfupeng
  */
 
-import menusConfig, {
-    EmotionsType,
-    FontSizeConfType,
-    IndentationType,
-    tooltipPositionType,
-    FontStyleType,
-} from './menus'
+import menusConfig, { EmotionsType, FontSizeConfType, IndentationType, tooltipPositionType, FontStyleType } from './menus'
 import eventsConfig from './events'
 import styleConfig from './style'
 import pasteConfig from './paste'
@@ -60,6 +54,7 @@ export type ConfigType = {
     uploadImgAccept: string[]
     uploadImgServer: string
     depotImgServer: string[]
+    parentsPapers: string
     uploadImgShowBase64: boolean
     uploadImgMaxSize: number
     uploadImgMaxLength: number

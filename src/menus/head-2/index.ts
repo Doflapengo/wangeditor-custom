@@ -11,6 +11,7 @@ import { getRandomCode } from '../../utils/util'
 import { TCatalog } from '../../config/events'
 import { EMPTY_P } from '../../utils/const'
 import bindEvent from './bind-event/index'
+import { ConfigType } from '../../config'
 
 interface headItem {
     id: number
@@ -37,6 +38,8 @@ class Head extends BtnMenu implements MenuActive {
     headHtml: string
     headData: headItem
 
+    config: ConfigType
+
     constructor(editor: Editor) {
         const $elem = $('<div class="w-e-menu" data-title="二级标题">H2</div>')
         super($elem, editor)
@@ -53,6 +56,8 @@ class Head extends BtnMenu implements MenuActive {
         this.headHtml = ''
         this.headData = { id: 1, level: 1, serial: 1, pid: 0, currentTitle: '1' }
         window.headsData = []
+
+        this.config = editor.config
     }
 
     public clickHandler(): void {
@@ -92,17 +97,46 @@ class Head extends BtnMenu implements MenuActive {
     }
 
     public setHeadSerial(editor: Editor) {
-        window.jq('.h1').each((index_1: number, elem_1: jqElem) => {
-            window.jq(elem_1).find('span').remove()
-            window.jq(elem_1).prepend(`<span>${index_1 + 1} </span>`)
-            window
-                .jq(elem_1)
-                .nextAll('.h2')
-                .each((index_2: number, elem_2: jqElem) => {
-                    window.jq(elem_2).find('span').remove()
-                    window.jq(elem_2).prepend(`<span>${index_1 + 1}.${index_2 + 1} </span>`)
-                })
-        })
+        let currentElem = editor.selection?.getSelectionContainerElem()?.elems[0]
+        if (window.jq(currentElem).prev('.h1').length) {
+            window.jq('.h1').each((index_1: number, elem_1: jqElem) => {
+                window.jq(elem_1).find('span').remove()
+                window.jq(elem_1).prepend(`<span>${index_1 + 1} </span>`)
+                window
+                    .jq(elem_1)
+                    .nextAll('.h2')
+                    .each((index_2: number, elem_2: jqElem) => {
+                        window.jq(elem_2).find('span').remove()
+                        window.jq(elem_2).prepend(`<span>${index_1 + 1}.${index_2 + 1} </span>`)
+                    })
+            })
+        } else {
+            let prevH2 = window.jq(currentElem).prevAll('.h2')
+            console.log(prevH2)
+            if (prevH2.length) {
+                let prevH2Arr = window.jq(prevH2[0]).find('span').text().trim().split('.')
+                let lastNum = prevH2Arr.pop()
+                window.jq(currentElem).find('span').remove()
+                window.jq(currentElem).prepend(`<span>${prevH2Arr.join('.')}.${Number(lastNum) + 1} </span>`)
+            } else {
+                let prevEditorH1 = window.jq(currentElem).parents(this.config.parentsPapers).prev(this.config.parentsPapers).find('.h1')
+                let prevEditorH1_H2 = window.jq(prevEditorH1[prevEditorH1.length - 1]).nextAll('.h2')
+                if (prevEditorH1_H2.length) {
+                    let prevEditorH1_H2Arr = prevEditorH1_H2.find('span').text().trim().split('.')
+                    let lastNum = prevEditorH1_H2Arr.pop()
+                    window.jq(currentElem).find('span').remove()
+                    window.jq(currentElem).prepend(`<span>${prevEditorH1_H2Arr.join('.')}.${Number(lastNum) + 1} </span>`)
+                } else {
+                    let prevEditorH1Arr = window
+                        .jq(prevEditorH1[prevEditorH1.length - 1])
+                        .find('span')
+                        .text()
+                        .trim()
+                    window.jq(currentElem).find('span').remove()
+                    window.jq(currentElem).prepend(`<span>${prevEditorH1Arr}.1 </span>`)
+                }
+            }
+        }
         editor.selection.collapseRange()
     }
 
