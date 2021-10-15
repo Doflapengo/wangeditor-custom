@@ -16,7 +16,7 @@ export type ImgPanelConf = {
     }
 } & PanelConf
 
-export default function (editor: Editor): ImgPanelConf {
+export default function (editor: Editor, depotImgServer: string[]): ImgPanelConf {
     const config = editor.config
     const uploadImg = new UploadImg(editor)
 
@@ -120,14 +120,16 @@ export default function (editor: Editor): ImgPanelConf {
     // 配置图库显示图片 给对应图片增加点击插入富文本编辑器的事件
     let depotDom = ''
     let events: any[] = []
-    if (config.depotImgServer.length > 0) {
+
+    config.depotImgServer = depotImgServer
+    if (config.depotImgServer && config.depotImgServer.length > 0) {
         config.depotImgServer.forEach((item, index) => {
             const imgId = getRandom('depot-img')
             depotDom += `
-        <div class="img-depot-item-wrap" src="${item}">
-            <img id="${imgId}" class="img-depot-item" src="${item}" />
-        </div>
-        `
+                            <div class="img-depot-item-wrap" src="${item}">
+                                <img id="${imgId}" class="img-depot-item" src="${item}" />
+                            </div>
+                            `
             events.push({
                 selector: '#' + imgId,
                 type: 'click',

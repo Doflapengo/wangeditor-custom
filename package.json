@@ -1,6 +1,6 @@
 {
   "name": "wangeditor-custom",
-  "version": "1.1.8",
+  "version": "1.1.9",
   "description": "根据 wangEditor 进行二开的项目，不要在生成环境中使用",
   "homepage": "",
   "keywords": [
@@ -106,6 +106,7 @@
   "dependencies": {
     "@babel/runtime": "^7.11.2",
     "@babel/runtime-corejs3": "^7.11.2",
+    "js-cookie": "^3.0.1",
     "tslib": "^2.1.0"
   },
   "husky": {

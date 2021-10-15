@@ -11,15 +11,14 @@ import Panel from '../menu-constructors/Panel'
 import PanelMenu from '../menu-constructors/PanelMenu'
 import bindEvent from './bind-event/index'
 import createPanelConf, { ImgPanelConf } from './create-panel-conf'
+const Cookies = require('js-cookie')
 
 class ImageDepot extends PanelMenu implements MenuActive {
     private imgPanelConfig: ImgPanelConf
 
     constructor(editor: Editor) {
-        let $elem = $(
-            '<div class="w-e-menu" data-title="图片"><i class="w-e-icon-image"></i></div>'
-        )
-        let imgPanelConfig = createPanelConf(editor)
+        let $elem = $('<div class="w-e-menu" data-title="图片"><i class="w-e-icon-image"></i></div>')
+        let imgPanelConfig = createPanelConf(editor, editor.config.depotImgServer)
         if (imgPanelConfig.onlyUploadConf) {
             $elem = imgPanelConfig.onlyUploadConf.$elem
             imgPanelConfig.onlyUploadConf.events.map(event => {
@@ -41,9 +40,26 @@ class ImageDepot extends PanelMenu implements MenuActive {
      * 菜单点击事件
      */
     public clickHandler(): void {
-        if (!this.imgPanelConfig.onlyUploadConf) {
-            this.createPanel()
-        }
+        let arr: string[] = []
+        window.jq.ajax({
+            url: this.editor.config.uploadImgServer,
+            type: 'get',
+            headers: {
+                Authorization: `Bearer ${Cookies.get('token')}`,
+            },
+            success: (res: any) => {
+                res.forEach((item: any) => {
+                    arr.push(item.url)
+                })
+                this.editor.config.depotImgServer = arr
+                this.imgPanelConfig = createPanelConf(this.editor, this.editor.config.depotImgServer)
+                this.createPanel()
+            },
+        })
+
+        // if (!this.imgPanelConfig.onlyUploadConf) {
+        //     this.createPanel()
+        // }
     }
 
     /**
